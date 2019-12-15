@@ -30,7 +30,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Static middleware
-app.use(express.static(path.join(__dirname, "public")));
+app.use("/findFrequentState", express.static(path.join(__dirname, "public")));
+
+app.get("/findFrequentState", (req, res) => {
+  // eslint-disable-next-line no-path-concat
+  // eslint-disable-next-line prefer-template
+  res.sendDate("index.html");
+});
+
+app.get("/", (req, res) => {
+  res.redirect("/findFrequentState");
+});
 
 // Mount routes
 app.use("/", stateRouter);

@@ -9,9 +9,18 @@ const asyncHandler = require("../middlewares/asyncMiddleware");
 @access     Public
 */
 
-exports.getCities = (req, res, next) => {
-  res.send("Here is your all cities");
-};
+exports.getCities = asyncHandler(async (req, res, next) => {
+  const { alphabet } = req.params;
+  if (!alphabet) {
+    return next(new ErrorResponse(`Please provide a valid alphabet`, 400));
+  }
+
+  const cities = await States.find({ cities: { $in: [/^n/i] } });
+  return res.status(200).json({
+    success: true,
+    data: cities
+  });
+});
 
 /* 
 @desc       Get state name from city name
