@@ -17,6 +17,9 @@ const app = express();
 // Require db
 const connectDB = require("./config/db");
 
+// Routes
+const stateRouter = require("./routes/states");
+
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -29,9 +32,8 @@ app.use(express.urlencoded({ extended: false }));
 // Static middleware
 app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
+// Mount routes
+app.use("/", stateRouter);
 
 // Error handler middleware
 app.use(errorHandler);
