@@ -1,3 +1,4 @@
+/* eslint-disable function-paren-newline */
 const myForm = document.querySelector("#myForm");
 const statNm = document.querySelector("#stateName");
 
@@ -12,7 +13,7 @@ const getData = async cityName => {
 
 const printState = name => {
   statNm.innerHTML = "";
-  statNm.innerHTML = name;
+  statNm.innerHTML = `Frequent State Name: <strong>${name}</strong>`;
 };
 
 myForm.onsubmit = async e => {
@@ -72,7 +73,6 @@ myForm.onsubmit = async e => {
     }
   });
 
-  console.log(newMap);
   // eslint-disable-next-line no-confusing-arrow
   const freqState = [...newMap.entries()].reduce((a, en) =>
     en[1] > a[1] ? en : a

@@ -5,6 +5,12 @@ const States = require("../models/States");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middlewares/asyncMiddleware");
 const sortThings = require("../utils/sort");
+const {
+  upperFirstCharacter,
+  removeSpace,
+  removeDash
+} = require("../utils/stringManipulation");
+
 /* 
 @desc       Get all cities with matching alphabet
 @route      GET /show-all-cities/:alphabet
@@ -30,6 +36,7 @@ exports.getCities = asyncHandler(async (req, res, next) => {
 
   return res.status(200).json({
     success: true,
+    count: matchedCities.length,
     data: matchedCities
   });
 });
@@ -41,20 +48,32 @@ exports.getCities = asyncHandler(async (req, res, next) => {
 */
 
 exports.getState = asyncHandler(async (req, res, next) => {
-  const { cityName } = req.params;
+  let { cityName } = req.params;
 
   if (!cityName) {
     return next(new ErrorResponse(`Please provide a city name`, 400));
   }
-  const state = await States.findOne({ cities: { $in: [`${cityName}`] } });
+  cityName = cityName
+    .split(" ")
+    .map(str => upperFirstCharacter(str))
+    .join("-");
+  const state = await States.findOne({
+    cities: { $in: [`${cityName}`] }
+  });
   if (!state) {
     return next(
       new ErrorResponse(`This city doesn't belongs to any state.`, 401)
     );
   }
+
+  //   "west-bengal" --> "West Bengal"
+  const foundStateName = state.state
+    .split("-")
+    .map(str => upperFirstCharacter(str))
+    .join(" ");
   return res.status(200).json({
     success: true,
-    data: state.state
+    data: foundStateName
   });
 });
 
@@ -65,22 +84,36 @@ exports.getState = asyncHandler(async (req, res, next) => {
 */
 
 exports.addCity = asyncHandler(async (req, res, next) => {
-  const { stateName, cityName } = req.params;
+  let { stateName, cityName } = req.params;
   if (!stateName || !cityName) {
     return next(
       new ErrorResponse(`Please provide state name and city name`, 400)
     );
   }
   //   Check if state exists or not
-  let state = await States.findOne({ state: stateName.toLowerCase() });
+  stateName = removeSpace(stateName.toLowerCase());
+  let state = await States.findOne({
+    state: stateName
+  });
   if (!state) {
     return next(
       new ErrorResponse(`State isn't available in our beloved India :p`, 401)
     );
   }
 
+  cityName = cityName
+    .split(" ")
+    .map(str => upperFirstCharacter(str))
+    .join("-");
+
   state.cities.push(cityName);
   state = await state.save();
+
+  //   "west-bengal" --> "West Bengal"
+  state.state = state.state
+    .split("-")
+    .map(str => upperFirstCharacter(str))
+    .join(" ");
 
   return res.status(201).json({
     success: true,
@@ -95,22 +128,37 @@ exports.addCity = asyncHandler(async (req, res, next) => {
 */
 
 exports.removeCity = asyncHandler(async (req, res, next) => {
-  const { stateName, cityName } = req.params;
+  let { stateName, cityName } = req.params;
   if (!stateName || !cityName) {
     return next(
       new ErrorResponse(`Please provide state name and city name`, 400)
     );
   }
   //   Check if state exists or not
-  let state = await States.findOne({ state: stateName.toLowerCase() });
+  stateName = removeSpace(stateName.toLowerCase());
+  let state = await States.findOne({
+    state: stateName
+  });
   if (!state) {
     return next(
       new ErrorResponse(`State isn't available in our beloved India :p`, 401)
     );
   }
 
+  //   "new coochbehar" --> "New-Coochbehar"
+  cityName = cityName
+    .split(" ")
+    .map(str => upperFirstCharacter(str))
+    .join("-");
+
   state.cities.remove(cityName);
   state = await state.save();
+
+  //   "west-bengal" --> "West Bengal"
+  state.state = state.state
+    .split("-")
+    .map(str => upperFirstCharacter(str))
+    .join(" ");
 
   return res.status(201).json({
     success: true,

@@ -5,6 +5,8 @@ const fs = require("fs");
 const mongoose = require("mongoose");
 const colors = require("colors");
 
+const { removeSpace } = require("./utils/stringManipulation");
+
 // Load env
 // eslint-disable-next-line import/no-extraneous-dependencies
 require("dotenv").config();
@@ -23,12 +25,14 @@ const cities = JSON.parse(
 const statesObj = {};
 
 cities.forEach(city => {
-  if (statesObj[city.state.toLowerCase()]) {
-    statesObj[city.state.toLowerCase()].cities.push(city.name);
+  if (statesObj[removeSpace(city.state.toLowerCase())]) {
+    statesObj[removeSpace(city.state.toLowerCase())].cities.push(
+      removeSpace(city.name)
+    );
   } else {
-    statesObj[city.state.toLowerCase()] = {
-      state: city.state.toLowerCase(),
-      cities: [city.name]
+    statesObj[removeSpace(city.state.toLowerCase())] = {
+      state: removeSpace(city.state.toLowerCase()),
+      cities: [removeSpace(city.name)]
     };
   }
 });
