@@ -3,5 +3,3 @@ exports.upperFirstCharacter = string =>
 
 exports.removeSpace = string => string.split(" ").join("-");
 exports.removeDash = string => string.split("-").join(" ");
-
-//  .map(item => this.upperFirstCharacter(item))

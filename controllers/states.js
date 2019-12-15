@@ -7,8 +7,7 @@ const asyncHandler = require("../middlewares/asyncMiddleware");
 const sortThings = require("../utils/sort");
 const {
   upperFirstCharacter,
-  removeSpace,
-  removeDash
+  removeSpace
 } = require("../utils/stringManipulation");
 
 /* 
@@ -100,7 +99,7 @@ exports.addCity = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`State isn't available in our beloved India :p`, 401)
     );
   }
-
+  //   "new coochbehar" --> "New-Coochbehar"
   cityName = cityName
     .split(" ")
     .map(str => upperFirstCharacter(str))
