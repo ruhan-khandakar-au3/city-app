@@ -1,8 +1,10 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable prefer-template */
 /* eslint-disable no-unused-vars */
 const States = require("../models/States");
 const ErrorResponse = require("../utils/errorResponse");
 const asyncHandler = require("../middlewares/asyncMiddleware");
-
+const sortThings = require("../utils/sort");
 /* 
 @desc       Get all cities with matching alphabet
 @route      GET /show-all-cities/:alphabet
@@ -15,10 +17,20 @@ exports.getCities = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse(`Please provide a valid alphabet`, 400));
   }
 
-  const cities = await States.find({ cities: { $in: [/^n/i] } });
+  const regex = new RegExp("^" + alphabet + "", "i");
+
+  let matchedCities = await States.aggregate([
+    { $match: { cities: { $elemMatch: { $regex: regex } } } },
+    { $unwind: "$cities" },
+    { $match: { cities: { $regex: regex } } }
+  ]);
+  matchedCities = matchedCities.map(item => item.cities);
+
+  matchedCities = matchedCities.sort(sortThings);
+
   return res.status(200).json({
     success: true,
-    data: cities
+    data: matchedCities
   });
 });
 
@@ -40,7 +52,7 @@ exports.getState = asyncHandler(async (req, res, next) => {
       new ErrorResponse(`This city doesn't belongs to any state.`, 401)
     );
   }
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     data: state.state
   });
