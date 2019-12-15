@@ -23,11 +23,11 @@ const cities = JSON.parse(
 const statesObj = {};
 
 cities.forEach(city => {
-  if (statesObj[city.state]) {
-    statesObj[city.state].cities.push(city.name);
+  if (statesObj[city.state.toLowerCase()]) {
+    statesObj[city.state.toLowerCase()].cities.push(city.name);
   } else {
-    statesObj[city.state] = {
-      state: city.state,
+    statesObj[city.state.toLowerCase()] = {
+      state: city.state.toLowerCase(),
       cities: [city.name]
     };
   }

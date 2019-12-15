@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 const States = require("../models/States");
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middlewares/asyncMiddleware");
 
 /* 
 @desc       Get all cities with matching alphabet
@@ -27,9 +29,28 @@ exports.getState = (req, res, next) => {
 @access     Public
 */
 
-exports.addCity = (req, res, next) => {
-  res.send("City added");
-};
+exports.addCity = asyncHandler(async (req, res, next) => {
+  const { stateName, cityName } = req.params;
+  if (!stateName || !cityName) {
+    return next(
+      new ErrorResponse(`Please provide state name and city name`, 400)
+    );
+  }
+  //   Check if state exists or not
+  let state = await States.findOne({ state: stateName.toLowerCase() });
+  if (!state) {
+    return next(
+      new ErrorResponse(`State isn't available in our beloved India :p`, 401)
+    );
+  }
+
+  state.cities.push(cityName);
+  state = await state.save();
+
+  res.json({
+    state
+  });
+});
 
 /* 
 @desc       Remove a city from a state
