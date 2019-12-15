@@ -1,0 +1,23 @@
+{
+  "name": "city-app",
+  "version": "1.0.0",
+  "description": "AttainU hiring challenge project",
+  "main": "server.js",
+  "repository": "https://github.com/ruhan-khandakar-au3/city-app.git",
+  "author": "Ruhan Khandakar",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon -r dotenv/config server.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.8.1"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^2.0.2"
+  }
+}
