@@ -29,22 +29,26 @@ if (process.env.NODE_ENV === "development") {
 // Express middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.sendFile("index.html");
+});
 
 // Static middleware
-app.use("/findFrequentState", express.static(path.join(__dirname, "public")));
 
 app.get("/findFrequentState", (req, res) => {
   // eslint-disable-next-line no-path-concat
   // eslint-disable-next-line prefer-template
-  res.sendDate("index.html");
-});
-
-app.get("/", (req, res) => {
-  res.redirect("/findFrequentState");
+  res.sendFile(path.join(__dirname, "public/frequent-state.html"));
 });
 
 // Mount routes
 app.use("/", stateRouter);
+
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
 
 // Error handler middleware
 app.use(errorHandler);

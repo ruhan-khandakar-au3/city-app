@@ -14,7 +14,6 @@ How to Run this project in Local Environment
         # Set your database/API connection information here
         MONGO_URL=.... (your mongo URL)
 
-
 > 3. Go to this folder and run `npm i` or `yarn install` to `install` all of dependencies
 > 4. To start server run this command `yarn run dev` or `npm run dev`. this will start your server from your given port number.
 
@@ -25,6 +24,11 @@ Live Demo Link -->
 
 ---
 
+# City-App
+
+NodeJS and ExpressJS App for attainu hiring challenge
+Live link https://attainu-city-app.herokuapp.com/
+
 ## Indices
 
 - [Default](#default)
@@ -33,6 +37,7 @@ Live Demo Link -->
   - [Add city into a state](#2-add-city-into-a-state)
   - [Return all city name which is match with the given alphabet](#3-return-all-city-name-which-is-match-with-the-given-alphabet)
   - [Get state name from city name](#4-get-state-name-from-city-name)
+  - [Get Frequent State from 5 given cites name](#5-get-frequent-state-from-5-given-cites-name)
 
 ---
 
@@ -86,8 +91,22 @@ Type:
 URL: https://attainu-city-app.herokuapp.com/state/malda
 ```
 
+### 5. Get Frequent State from 5 given cites name
+
+This route has 5 input fields with one submit button. after the submission the frequent state name will be render below the form.
+
+Link Link: https://attainu-city-app.herokuapp.com/findFrequentState/
+
+**_Endpoint:_**
+
+```bash
+Method: GET
+Type:
+URL: https://attainu-city-app.herokuapp.com/findFrequentState/
+```
+
 ---
 
 [Back to top](#city-app)
 
-> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2019-12-15 21:42:41 by [docgen](https://github.com/thedevsaddam/docgen)
+> Made with &#9829; by [thedevsaddam](https://github.com/thedevsaddam) | Generated at: 2019-12-15 22:11:23 by [docgen](https://github.com/thedevsaddam/docgen)
