@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
+
 const fs = require("fs");
 
 const mongoose = require("mongoose");
 const colors = require("colors");
 
 // Load env
+// eslint-disable-next-line import/no-extraneous-dependencies
 require("dotenv").config();
 
 const { url } = require("./config");
