@@ -5,7 +5,7 @@ const asyncHandler = require("../middlewares/asyncMiddleware");
 
 /* 
 @desc       Get all cities with matching alphabet
-@route      POST /show-all-cities/:alphabet
+@route      GET /show-all-cities/:alphabet
 @access     Public
 */
 
@@ -15,13 +15,27 @@ exports.getCities = (req, res, next) => {
 
 /* 
 @desc       Get state name from city name
-@route      POST /state/:cityName
+@route      GET /state/:cityName
 @access     Public
 */
 
-exports.getState = (req, res, next) => {
-  res.send("Here is your state name");
-};
+exports.getState = asyncHandler(async (req, res, next) => {
+  const { cityName } = req.params;
+
+  if (!cityName) {
+    return next(new ErrorResponse(`Please provide a city name`, 400));
+  }
+  const state = await States.findOne({ cities: { $in: [`${cityName}`] } });
+  if (!state) {
+    return next(
+      new ErrorResponse(`This city doesn't belongs to any state.`, 401)
+    );
+  }
+  res.status(200).json({
+    success: true,
+    data: state.state
+  });
+});
 
 /* 
 @desc       Add city to a state
@@ -55,7 +69,7 @@ exports.addCity = asyncHandler(async (req, res, next) => {
 
 /* 
 @desc       Remove a city from a state
-@route      POST /state/:stateName/remove/:cityName
+@route      DELETE /state/:stateName/remove/:cityName
 @access     Public
 */
 
