@@ -47,8 +47,9 @@ exports.addCity = asyncHandler(async (req, res, next) => {
   state.cities.push(cityName);
   state = await state.save();
 
-  res.json({
-    state
+  return res.status(201).json({
+    success: true,
+    data: state
   });
 });
 
@@ -58,6 +59,26 @@ exports.addCity = asyncHandler(async (req, res, next) => {
 @access     Public
 */
 
-exports.removeCity = (req, res, next) => {
-  res.send("City removed");
-};
+exports.removeCity = asyncHandler(async (req, res, next) => {
+  const { stateName, cityName } = req.params;
+  if (!stateName || !cityName) {
+    return next(
+      new ErrorResponse(`Please provide state name and city name`, 400)
+    );
+  }
+  //   Check if state exists or not
+  let state = await States.findOne({ state: stateName.toLowerCase() });
+  if (!state) {
+    return next(
+      new ErrorResponse(`State isn't available in our beloved India :p`, 401)
+    );
+  }
+
+  state.cities.remove(cityName);
+  state = await state.save();
+
+  return res.status(201).json({
+    success: true,
+    data: state
+  });
+});
