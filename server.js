@@ -3,7 +3,6 @@
 const path = require("path");
 
 const express = require("express");
-const morgan = require("morgan");
 const colors = require("colors");
 
 const { port } = require("./config");
@@ -22,6 +21,8 @@ const stateRouter = require("./routes/states");
 
 // Dev logging middleware
 if (process.env.NODE_ENV === "development") {
+  // eslint-disable-next-line global-require
+  const morgan = require("morgan");
   app.use(morgan("dev"));
 }
 
