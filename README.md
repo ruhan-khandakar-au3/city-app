@@ -14,8 +14,9 @@ How to Run this project in Local Environment
         # Set your database/API connection information here
         MONGO_URL=.... (your mongo URL)
 
-> 3. Go to this folder and run `npm i` or `yarn install` to `install` all of dependencies
-> 4. To start server run this command `yarn run dev` or `npm run dev`. this will start your server from your given port number.
+> 3. Now run this command --> `node seeder.js -i` , this will take all data from json file and will store all data into your database. (`node seeder.js -d` this will remove everything from your database.)
+> 4. Go to this folder and run `npm i` or `yarn install` to `install` all of dependencies
+> 5. To start server run this command `yarn run dev` or `npm run dev`. this will start your server from your given port number.
 
 ---
 
